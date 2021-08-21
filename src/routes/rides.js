@@ -105,23 +105,67 @@ router.post('/rides', (req, res) => {
     });
 });
 
-router.get('/rides', (req, res) => {
-  req.app.db.all('SELECT * FROM Rides', (err, rows) => {
-    if (err) {
-      return res.status(500).send({
-        error_code: 'SERVER_ERROR',
-        message: 'Unknown error',
-      });
-    }
-    if (rows.length === 0) {
-      return res.status(404).send({
-        error_code: 'RIDES_NOT_FOUND_ERROR',
-        message: 'Could not find any rides',
-      });
-    }
+router.get('/rides', async (req, res) => {
+  if ((Number.isNaN(Number(req.query.page)) && req.query.page !== undefined)
+  || (Number.isNaN(Number(req.query.page_size)) && req.query.page_size !== undefined)) {
+    return res.status(400).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'Invalid parameter',
+    });
+  }
+  const page = Number(req.query.page) || 1;
+  const pageSize = Number(req.query.page_size) || 10;
 
-    return res.send(rows.map(rideToApi));
-  });
+  if (pageSize < 1 || pageSize > 100) {
+    return res.status(400).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'page_size need to be >0',
+    });
+  }
+
+  if (page < 1) {
+    return res.status(400).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'page need to be >0',
+    });
+  }
+
+  const offset = (page - 1) * pageSize;
+
+  const data = await Promise.all([
+    new Promise((resolve) => {
+      req.app.db.all('SELECT count() FROM Rides', (err, rows) => {
+        if (err || !rows) {
+          return res.status(500).send({
+            error_code: 'SERVER_ERROR',
+            message: 'Unknown error',
+          });
+        }
+        return resolve(rows[0]['count()']);
+      });
+    }),
+    new Promise((resolve) => {
+      req.app.db.all(`SELECT * FROM Rides ORDER BY rideID limit ${pageSize} offset ${offset}`, (err, rows) => {
+        if (err || !rows) {
+          return res.status(500).send({
+            error_code: 'SERVER_ERROR',
+            message: 'Unknown error',
+          });
+        }
+        return resolve(rows);
+      });
+    }),
+  ]);
+
+  const response = {
+    page,
+    total_pages: Math.ceil(data[0] / pageSize),
+    items: data[1] && data[1].length ? [
+      data[1],
+    ] : [],
+  };
+
+  return res.send(response);
 });
 
 router.get('/rides/:id', (req, res) => {

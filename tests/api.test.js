@@ -210,7 +210,7 @@ describe('API tests', () => {
   });
 
   describe('GET /rides', () => {
-    it('should return list of rides when any is in DB', (done) => {
+    it('should return default paginated list of rides when any is in DB', (done) => {
       request(app)
         .post('/rides')
         .send(rideAsset)
@@ -221,9 +221,6 @@ describe('API tests', () => {
             .get('/rides')
             .expect('Content-Type', /application\/json/)
             .expect((response) => {
-              if (!response || !response.length) {
-                return false;
-              }
               const {
                 ride_id,
                 start_lat,
@@ -234,7 +231,8 @@ describe('API tests', () => {
                 driver_name,
                 driver_vehicle,
                 created,
-              } = response[0];
+              } = response.body.items[0];
+              const { page, total_pages } = response.body;
               return (
                 Boolean(ride_id)
             && Boolean(start_lat)
@@ -246,10 +244,99 @@ describe('API tests', () => {
             && Boolean(driver_vehicle)
             && Boolean(created)
             && !Number.isNaN(Date.parse(created))
+            && page === 1
+            && total_pages === 1
               );
             })
             .expect(200, done);
         });
+    });
+
+    it('should return default paginated list of rides when more than one page available', async () => {
+      await Promise.all([request(app)
+        .post('/rides')
+        .send(rideAsset), request(app)
+        .post('/rides')
+        .send(rideAsset), request(app)
+        .post('/rides')
+        .send(rideAsset)]);
+
+      await request(app)
+        .get('/rides')
+        .query({ page: 1, page_size: 1 })
+        .expect(200)
+        .expect((res) => res.body.items[0].page === 1)
+        .expect((res) => res.body.items[0].total_pages === 3)
+        .expect((res) => res.body.items[0].start_long !== undefined)
+        .expect((res) => res.body.items[0].end_lat !== undefined)
+        .expect((res) => res.body.items[0].end_long !== undefined)
+        .expect((res) => res.body.items[0].rider_name !== undefined)
+        .expect((res) => res.body.items[0].driver_name !== undefined)
+        .expect((res) => res.body.items[0].driver_vehicle !== undefined)
+        .expect((res) => res.body.items[0].created !== undefined);
+      return true;
+    });
+    it('should return empty array of items when querying out of bounds', async () => {
+      await Promise.all([request(app)
+        .post('/rides')
+        .send(rideAsset), request(app)
+        .post('/rides')
+        .send(rideAsset), request(app)
+        .post('/rides')
+        .send(rideAsset)]);
+
+      await request(app)
+        .get('/rides')
+        .query({ page: 100, page_size: 100 })
+        .expect(200)
+        .expect((res) => res.body.items.length === 0)
+        .expect((res) => res.body.page === 100);
+      return true;
+    });
+    it('should throw if page is NaN', async () => {
+      await request(app)
+        .get('/rides')
+        .query({ page: 'string', page_size: 100 })
+        .expect(400)
+        .expect((res) => res.body.error_code !== undefined)
+        .expect((res) => res.body.message !== undefined);
+      return true;
+    });
+    it('should throw if page is invalid', async () => {
+      await request(app)
+        .get('/rides')
+        .query({ page: -1, page_size: 100 })
+        .expect(400)
+        .expect((res) => res.body.error_code !== undefined)
+        .expect((res) => res.body.message !== undefined);
+      return true;
+    });
+    it('should throw if page_size is >100', async () => {
+      await request(app)
+        .get('/rides')
+        .query({ page: 1, page_size: 101 })
+        .expect(400)
+        .expect((res) => res.body.error_code !== undefined)
+        .expect((res) => res.body.message !== undefined);
+      return true;
+    });
+    it('should throw if page_size is <100', async () => {
+      await request(app)
+        .get('/rides')
+        .query({ page: 1, page_size: -101 })
+        .expect(400)
+        .expect((res) => res.body.error_code !== undefined)
+        .expect((res) => res.body.message !== undefined);
+      return true;
+    });
+    it('should throw if page_size is NaN', async () => {
+      await request(app)
+        .get('/rides')
+        .query({ page: 1, page_size: 's101' })
+        .expect(400)
+        .expect((res) => res.body.error_code !== undefined)
+        .expect((res) => res.body.message !== undefined);
+      return true;
     });
   });
 

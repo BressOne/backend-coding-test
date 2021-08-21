@@ -50,7 +50,10 @@ in respose you will get created Ride object witl auto-generated
 
 and fields you passed in.
 
-Use GET `/rides` route for a list of existing rides. An array of Rides is expected to be returned.
+Use GET `/rides` route for a list of existing rides. Use optional query params: `page` and `page_size` to adjust the pagination. Response will have shape:
+`{ "page": 1, "total_pages": 64, "items": [Rides] }`
+Note: `page` defaults to 1 if none given
+`page_size` defaults to 10 if none given, Max page size is 100
 Use GET `/rides/{id}` route for an existing ride. Rides object is expected to be returned.
 
 Features
