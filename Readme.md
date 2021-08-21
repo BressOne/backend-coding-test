@@ -24,8 +24,9 @@ Also you can use debug mode. Debugging profile is set.
 There are several env vars, which the service can be adjusted with:
 |var|effect |
 |--|--|
-|PORT|The port on which the service will be set up|
+|PORT|Integer, the port on which the service will be set up|
 |ALLOW_LOGGING|Cast to Boolean, will surpress or allow logging in console|
+|EXPOSE_SWAGGER|Cast to Boolean, allows to control, wether the swagger doc ui will be available on `/api-docs` or not|
 
 Once you are live you can use your favorite tool to access the API
 
@@ -34,18 +35,18 @@ API is documented with Swagger and is available on the `/api-docs`.
 Use GET `/health`route for liveness check. 200 status is expected.
 Use POST `/rides` with JSON body, containing fields:
 
-     startLat: decimal >=-90 and <=90;
-     startLong: decimal >=-180 and <=180;
-     endLat: decimal >=-90 and <=90;
-     endLong: decimal >=-180 and <=180;
-     riderName: string with >1 chars;
-     driverName: string with >1 chars;
-     driverVehicle: string with >1 chars
+     start_lat: decimal >=-90 and <=90;
+     start_long: decimal >=-180 and <=180;
+     end_lat: decimal >=-90 and <=90;
+     end_long: decimal >=-180 and <=180;
+     ride_rName: string with >1 chars;
+     driver_name: string with >1 chars;
+     driver_vehicle: string with >1 chars
 
 in respose you will get created Ride object witl auto-generated
 
     id: string
-    created: date
+    created: date string
 
 and fields you passed in.
 
