@@ -1,36 +1,53 @@
 version: 2.1
 orbs:
   node: circleci/node@2.0.3
-
+  heroku: circleci/heroku@1.0.1
 jobs:
   test:
     executor:
       name: node/default
     steps:
+      - run: echo "this is the test job"
       - checkout
       - node/install-packages
       - run:
           command: npm run lint
-  test1:
+  test2:
     executor:
       name: node/default
     steps:
+      - run: echo "this is the test job"
       - checkout
       - node/install-packages
       - run:
-          command: npm run coverage
+          command: npm run lint
+  # build:
+  #   working_directory: ~/project/backend
+  #   executor: node/default
+  #   steps:
+  #     - checkout
+  #     - node/install-npm
+  #     - node/install-packages:
+  #         app-dir: ~/project/backend
+  #         cache-version: v1
+  #         cache-path: node_modules
+  #     - run:
+  #         app-dir: ~/project/backend
+  #         cache-version: v1
+  #         command: npm run build
+  #         name: Build
 workflows:
   test&build&deploy:
     jobs:
       - test:
           filters:
             branches:
-              only:
-                - master
-      - test1:
+              ignore:
+                - main
+      - test2:
           requires:
             - test
           filters:
             branches:
-              only:
-                - master
+              ignore:
+                - main
