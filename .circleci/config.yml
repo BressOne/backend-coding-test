@@ -3,31 +3,35 @@ orbs:
   node: circleci/node@2.0.3
   heroku: circleci/heroku@1.0.1
 jobs:
-  test-lint:
+  test:
     executor:
       name: node/default
     steps:
+      - run: dir 
       - checkout
       - node/install-packages
       - run:
           command: npm run lint
-  test-coverage:
+  test2:
     executor:
       name: node/default
     steps:
+      - run: dir 
+      - checkout
+      - node/install-packages
       - run:
-          command: npm run coverage
+          command: npm run lint
 workflows:
   test&build&deploy:
     jobs:
-      - test-lint:
+      - test:
           filters:
             branches:
               ignore:
                 - main
-      - test-coverage:
+      - test2:
           requires:
-            - test-lint
+            - test
           filters:
             branches:
               ignore:
