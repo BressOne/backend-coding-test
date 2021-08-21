@@ -21,6 +21,12 @@ to get the server up and running on the port specified in the PORT env variable 
 
 Also you can use debug mode. Debugging profile is set.
 
+There are several env vars, which the service can be adjusted with:
+|var|effect |
+|--|--|
+|PORT|The port on which the service will be set up|
+|ALLOW_LOGGING|Cast to Boolean, will surpress or allow logging in console|
+
 Once you are live you can use your favorite tool to access the API
 
 API is documented with Swagger and is available on the `/api-docs`.
@@ -45,3 +51,11 @@ and fields you passed in.
 
 Use GET `/rides` route for a list of existing rides. An array of Rides is expected to be returned.
 Use GET `/rides/{id}` route for an existing ride. Rides object is expected to be returned.
+
+Features
+
+Logging.
+Using Winston logging is set up to store logs errors and combined log in the `logs` folder of the root of the project.
+
+API docs.
+Using Swagger. Ensure you edit the swagger schema when editing any of the routes in the service. Each of sqgger doc chunks is named using pattern `{route}Swagger.js` and are located right at the same folder of the routes: `./src/routes/{route}Swagger.js`
