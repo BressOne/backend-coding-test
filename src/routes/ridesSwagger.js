@@ -150,15 +150,45 @@
  *   get:
  *     summary: Returns the list of all the rides
  *     tags: [Rides]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         required: false
+ *         description: Page to view. Expected to be >0, defaults to 1
+ *       - in: query
+ *         name: page_size
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         required: false
+ *         description: Page size to view. Expected to be >0, defaults to 10. Max is 100
  *     responses:
  *       200:
  *         description: The list of the rides
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Ride'
+ *               type: object
+ *               properties:
+ *                 page:
+ *                   type: integer
+ *                   description: unique rideID
+ *                 total_pages:
+ *                   type: integer
+ *                   description: The ride starting latitude. Is >=-90 && <=90
+ *                 items:
+ *                   type: array
+ *                   schema:
+ *                     $ref: '#/components/schemas/Ride'
+ *               example:
+ *                 page: 1
+ *                 total_pages: 101
+ *                 items: [
+ *                    type: object
+ *                 ]
  *       404:
  *         description: Rides were not found
  *         content:
