@@ -1,16 +1,46 @@
 const express = require('express');
+const {
+  apiToDb:
+   { rideToDb },
+  dbToApi:
+    { rideToApi },
+} = require('../utils/mapers');
 
 const router = express.Router();
 
 router.post('/rides', (req, res) => {
-  const startLatitude = Number(req.body.start_lat);
-  const startLongitude = Number(req.body.start_long);
-  const endLatitude = Number(req.body.end_lat);
-  const endLongitude = Number(req.body.end_long);
-  const riderName = req.body.rider_name;
-  const driverName = req.body.driver_name;
-  const driverVehicle = req.body.driver_vehicle;
+  if (typeof req.body.start_lat !== 'number'
+|| typeof req.body.start_long !== 'number'
+|| typeof req.body.end_lat !== 'number'
+|| typeof req.body.end_long !== 'number') {
+    return res.status(400).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'Start latitude and longitude must be a number',
+    });
+  }
 
+  const {
+    startLatitude,
+    startLongitude,
+    endLatitude,
+    endLongitude,
+    riderName,
+    driverName,
+    driverVehicle,
+  } = rideToDb(req.body);
+
+  if (!startLatitude
+      || !startLongitude
+      || !endLatitude
+      || !endLongitude
+      || !riderName
+      || !driverName
+      || !driverVehicle) {
+    return res.status(400).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'Some of required parameters missing',
+    });
+  }
   if (startLatitude < -90 || startLatitude > 90 || startLongitude < -180 || startLongitude > 180) {
     return res.status(400).send({
       error_code: 'VALIDATION_ERROR',
@@ -46,17 +76,16 @@ router.post('/rides', (req, res) => {
     });
   }
 
-  const values = [req.body.start_lat,
-    req.body.start_long,
-    req.body.end_lat,
-    req.body.end_long,
-    req.body.rider_name,
-    req.body.driver_name,
-    req.body.driver_vehicle];
+  const values = [startLatitude,
+    startLongitude,
+    endLatitude,
+    endLongitude,
+    riderName,
+    driverName,
+    driverVehicle];
 
   return req.app.db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    values,
-    (err) => {
+    values, function fn(err) {
       if (err) {
         return res.status(500).send({
           error_code: 'SERVER_ERROR',
@@ -65,14 +94,13 @@ router.post('/rides', (req, res) => {
       }
 
       return req.app.db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, (error, rows) => {
-        if (err) {
+        if (error || !(rows || rows[0])) {
           return res.status(500).send({
             error_code: 'SERVER_ERROR',
             message: 'Unknown error',
           });
         }
-
-        return res.send(rows);
+        return res.send(rideToApi(rows[0]));
       });
     });
 });
@@ -85,7 +113,6 @@ router.get('/rides', (req, res) => {
         message: 'Unknown error',
       });
     }
-
     if (rows.length === 0) {
       return res.status(404).send({
         error_code: 'RIDES_NOT_FOUND_ERROR',
@@ -93,13 +120,13 @@ router.get('/rides', (req, res) => {
       });
     }
 
-    return res.send(rows);
+    return res.send(rows.map(rideToApi));
   });
 });
 
 router.get('/rides/:id', (req, res) => {
   req.app.db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
-    if (err) {
+    if (err || !rows) {
       return res.status(500).send({
         error_code: 'SERVER_ERROR',
         message: 'Unknown error',
@@ -113,7 +140,7 @@ router.get('/rides/:id', (req, res) => {
       });
     }
 
-    return res.send(rows);
+    return res.send(rideToApi(rows[0]));
   });
 });
 
