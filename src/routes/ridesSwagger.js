@@ -47,7 +47,7 @@
  *         endLat: 1
  *         endLong: -1
  *         riderName: Bopt
- *         driverName: L.Blake 
+ *         driverName: L.Blake
  *         driverVehicle: Just a car
  *         created:
  *     RidePayload:
@@ -88,7 +88,7 @@
  *         endLat: 1
  *         endLong: -1
  *         riderName: Bopt
- *         driverName: L.Blake 
+ *         driverName: L.Blake
  *         driverVehicle: Just a car
  *     Error:
  *       type: object
@@ -137,7 +137,7 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *       400:
- *         description: Invalid parameter 
+ *         description: Invalid parameter
  *         content:
  *           application/json:
  *             schema:

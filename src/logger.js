@@ -1,6 +1,6 @@
 const winston = require('winston');
 
-module.exports = winston.createLogger({
+const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   defaultMeta: { service: 'backend-coding-test' },
@@ -9,3 +9,11 @@ module.exports = winston.createLogger({
     new winston.transports.File({ filename: './logs/combined.log' }),
   ],
 });
+
+if (process.env.ALLOW_LOGGING) {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }));
+}
+
+module.exports = logger;

@@ -14,7 +14,6 @@
  *         response: Healthy
  */
 
-
 /**
   * @swagger
   * tags:
