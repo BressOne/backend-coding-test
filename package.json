@@ -12,8 +12,14 @@
     "dev": "nodemon index.js",
     "lint-fix": "eslint --fix --ext .js .",
     "lint": "eslint --ext .js .",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc npm run test",
+    "test1": "echo \"Error: I SHOULD FAIL LOLOLOLOLOL \" && exit 1",
   },
+  "pre-push": [
+    "test1",
+    "lint",
+    "coverage"
+  ],
   "keywords": [
     "Xendit"
   ],
@@ -47,9 +53,5 @@
     "lines": 80,
     "functions": 80,
     "statements": 80
-  },
-  "pre-push": [
-    "lint",
-    "coverage"
-  ]
+  }
 }
