@@ -1,6 +1,6 @@
 **Xendit Coding Exercise**
 Provided exercise is an example implementation of API based on NodeJS. This API allows to store and read Rides.
-To get started simply ensure you are running nodeJS >=8.6 but <=10. However, development was done under the 10.13.0 localStorage, so keep that in mind.
+To get started simply ensure you are running nodeJS >=8.6 but <=10. However, development was done under the 10.13.0 LTS, so keep that in mind.
 To install dependencies use
 
 > npm ci
@@ -25,7 +25,7 @@ Once you are live you can use your favorite tool to access the API
 
 API is documented with Swagger and is available on the `/api-docs`.
 
-Use GET`/health`route for liveness check. 200 status is expected.
+Use GET `/health`route for liveness check. 200 status is expected.
 Use POST `/rides` with JSON body, containing fields:
 
      startLat: decimal >=-90 and <=90;
@@ -43,5 +43,5 @@ in respose you will get created Ride object witl auto-generated
 
 and fields you passed in.
 
-Use GET`/rides`route for a list of existing rides. An array of Rides is expected to be returned.
-Use GET`/rides/{id}` route for an existing ride. Rides object is expected to be returned.
+Use GET `/rides` route for a list of existing rides. An array of Rides is expected to be returned.
+Use GET `/rides/{id}` route for an existing ride. Rides object is expected to be returned.
