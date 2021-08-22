@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getRideById, getRidesList, createRide } = require('./ridesController');
+const { getRideById, getRidesList, createRide } = require('../controllers/ridesController');
 
 const router = express.Router();
 

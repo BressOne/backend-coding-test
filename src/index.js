@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 
 const ridesRouter = require('./routes/ridesRoutes');
-const serviceRouter = require('./routes/service');
+const serviceRouter = require('./routes/servicerRoutes');
 const buildSchemas = require('./schemas/rides');
 const specs = require('./utils/swagger');
 const corsOptions = require('./utils/cors');
@@ -16,7 +16,7 @@ const db = new sqlite3.Database(':memory:');
 
 db.serialize(() => buildSchemas(db));
 
-if (process.env.EXPOSE_SWAGGER) {
+if (true) {
   app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 }
 
