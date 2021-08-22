@@ -23,6 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chai": "^4.3.4",
     "express": "^4.16.4",
     "sqlite3": "^4.0.6",
     "swagger-jsdoc": "^6.1.0",
@@ -51,6 +52,6 @@
     "statements": 80
   },
   "husky": {
-  "pre-push": "npm run hooks:pre-push"
+    "pre-push": "npm run hooks:pre-push"
   }
 }
