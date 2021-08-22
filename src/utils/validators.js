@@ -37,13 +37,13 @@ const validateRide = (req) => {
     driverVehicle,
   } = rideToDb(req.body);
 
-  if (!startLatitude
-      || !startLongitude
-      || !endLatitude
-      || !endLongitude
-      || !riderName
-      || !driverName
-      || !driverVehicle) {
+  if (startLatitude === undefined
+      || startLongitude === undefined
+      || endLatitude === undefined
+      || endLongitude === undefined
+      || riderName === undefined
+      || driverName === undefined
+      || driverVehicle === undefined) {
     throw serviceError(
       VALIDATION_ERROR,
       'Some of required parameters missing',

@@ -19,6 +19,20 @@ jobs:
       - node/install-packages
       - run:
           command: mkdir .nyc_output && npm run cover:merge && npm run cover:report
+  test-load:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          command: sudo npm install forever -g
+      - run:
+          command: forever start index.js
+      - run:
+          command: npm run test:load
+      - run:
+          command: forever stopall             
 workflows:
   test&build&deploy:
     jobs:
@@ -30,6 +44,13 @@ workflows:
       - test-coverage:
           requires:
             - test-lint
+          filters:
+            branches:
+              ignore:
+                - main
+      - test-load:
+          requires:
+            - test-coverage
           filters:
             branches:
               ignore:

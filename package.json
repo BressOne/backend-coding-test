@@ -11,6 +11,7 @@
     "test:cors": "mocha ./tests/cors.test.js --exit",
     "test:brute": "mocha ./tests/security/brute.test.js",
     "test:sqli": "mocha ./tests/injection.test.js",
+    "test:load": "artillery run tests/artillery/getRidesList.yml && artillery run tests/artillery/getHealth.yml && artillery run tests/artillery/getRide.yml && artillery run tests/artillery/postRide.yml",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint-fix": "eslint --fix --ext .js .",
@@ -33,12 +34,14 @@
     "dotenv": "^10.0.0",
     "express": "^4.16.4",
     "express-brute": "^1.0.1",
+    "forever": "^4.0.1",
     "sqlite3": "^5.0.2",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "artillery": "^1.7.7",
     "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-base": "^14.2.1",
