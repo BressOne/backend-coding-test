@@ -1,0 +1,14 @@
+config:
+  target: "http://localhost:8010"
+  phases:
+    - duration: 30
+      arrivalRate: 100
+      name: Sustained load
+  ensure:
+    p99: 50
+
+scenarios:
+  - name: "Check health"
+    flow:
+      - get:
+          url: "/health"
