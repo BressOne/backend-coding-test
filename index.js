@@ -1,3 +1,5 @@
+require('dotenv').config({ path: `${process.cwd()}/cors.env.` });
+
 const loger = require('./src/utils/logger');
 
 const PORT = process.env.PORT || 8010;

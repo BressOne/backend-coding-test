@@ -7,12 +7,16 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "mocha ./tests/*.js --exit",
+    "test:cors": "mocha ./tests/cors.test.js --exit",
+    "test:brute": "mocha ./tests/security/brute.test.js",
+    "test:sqli": "mocha ./tests/injection.test.js",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint-fix": "eslint --fix --ext .js .",
     "lint": "eslint --ext .js .",
-    "coverage": "nyc npm run test",
+    "cover:merge": "npm run test && npm run test:brute && nyc merge .nyc_output coverage.json",
+    "cover:report": "nyc report --reporter=lcov --reporter=text",
     "prepare": "husky install",
     "hooks:pre-push": "node ./hooks/pre-push.js"
   },
@@ -22,12 +26,14 @@
   "author": "Bo",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.5",
     "body-parser": "^1.19.0",
     "chai": "^4.3.4",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.16.4",
     "express-brute": "^1.0.1",
-    "sqlite3": "^4.0.6",
+    "sqlite3": "^5.0.2",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3"
@@ -40,11 +46,11 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "mocha": "^6.1.4",
+    "husky": "^7.0.0",
+    "mocha": "^9.1.0",
     "nodemon": "^2.0.12",
     "nyc": "^15.1.0",
-    "supertest": "^4.0.2",
-    "husky": "^7.0.0"
+    "supertest": "^4.0.2"
   },
   "nyc": {
     "check-coverage": true,

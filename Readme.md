@@ -1,6 +1,7 @@
 **Xendit Coding Exercise**
 Provided exercise is an example implementation of API based on NodeJS. This API allows to store and read Rides.
-To get started simply ensure you are running nodeJS >=8.6 but <=10. However, development was done under the 10.13.0 LTS, so keep that in mind.
+To get started simply ensure you are running nodeJS 14 LTS. However, development was done under the 14.17.5 LTS, so keep that in mind.
+Stability is not guaranteed if you are using older versions of NodeJS.
 To install dependencies use
 
 > npm ci
@@ -29,6 +30,8 @@ There are several env vars, which the service can be adjusted with:
 |EXPOSE_SWAGGER|Cast to Boolean, allows to control, wether the swagger doc ui will be available on `/api-docs` or not|
 |ALOWED_ORIGINS|Comma-separated list of allowed origins, allows to control, which origins are allowed to access the api. If not provided - will be set to wildcard/ Example: "stackoverflow.com,stack.com"|
 |ENABLE_BRUTE_FORCE_PROTECTION|0 or 1, casts to Boolean. Allows to control BF protection. Disabled, bu default|
+|BF_FREE_RETRIES|Integer >1. Allows to control BF retries. Defaults to 2 inside BF package|
+|BF_MAX_WAIT|integer >1, ms. The initial wait time after the user runs out of retries. Defaults to 500 milliseconds|
 
 Once you are live you can use your favorite tool to access the API
 
@@ -65,3 +68,13 @@ Using Winston logging is set up to store logs errors and combined log in the `lo
 
 API docs.
 Using Swagger. Ensure you edit the swagger schema when editing any of the routes in the service. Each of sqgger doc chunks is named using pattern `{route}Swagger.js` and are located right at the same folder of the routes: `./src/routes/{route}Swagger.js`
+
+Security.
+Service protected from sql injections, bruteforce and cors. Anyway, see env variables to adjust your security
+
+Tests.
+Check package.json for testing commands.
+Use the sequence to run all tests available and to henerate report
+
+> npm run cover:merge
+> npm run cover:report

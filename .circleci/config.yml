@@ -15,8 +15,10 @@ jobs:
     executor:
       name: node/default
     steps:
+      - checkout
+      - node/install-packages
       - run:
-          command: npm run coverage
+          command: mkdir .nyc_output && npm run cover:merge && npm run cover:report
 workflows:
   test&build&deploy:
     jobs:
