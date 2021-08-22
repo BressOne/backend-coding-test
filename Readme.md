@@ -27,6 +27,8 @@ There are several env vars, which the service can be adjusted with:
 |PORT|Integer, the port on which the service will be set up|
 |ALLOW_LOGGING|Cast to Boolean, will surpress or allow logging in console|
 |EXPOSE_SWAGGER|Cast to Boolean, allows to control, wether the swagger doc ui will be available on `/api-docs` or not|
+|ALOWED_ORIGINS|Comma-separated list of allowed origins, allows to control, which origins are allowed to access the api. If not provided - will be set to wildcard/ Example: "stackoverflow.com,stack.com"|
+|ENABLE_BRUTE_FORCE_PROTECTION|0 or 1, casts to Boolean. Allows to control BF protection. Disabled, bu default|
 
 Once you are live you can use your favorite tool to access the API
 
