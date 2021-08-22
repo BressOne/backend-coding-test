@@ -2,7 +2,7 @@ const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const sqlite3 = require('sqlite3').verbose();
 
-const ridesRouter = require('./routes/rides');
+const ridesRouter = require('./routes/ridesRoutes');
 const serviceRouter = require('./routes/service');
 const buildSchemas = require('./schemas/rides');
 const specs = require('./utils/swagger');
