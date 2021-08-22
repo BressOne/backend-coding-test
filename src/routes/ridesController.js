@@ -19,7 +19,7 @@ const sendServerError = (res, err) => res.status(err.code).send({
 
 const getRideById = async (req, res) => {
   const response = await new Promise((resolve) => {
-    req.app.db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, (err, rows) => {
+    req.app.db.all('SELECT * FROM Rides WHERE rideID=?', req.params.id, (err, rows) => {
       if (err || !rows) {
         return sendServerError(res);
       }
@@ -101,7 +101,7 @@ const getRidesList = async (req, res) => {
       });
     }),
     new Promise((resolve) => {
-      req.app.db.all(`SELECT * FROM Rides ORDER BY rideID limit ${pageSize} offset ${offset}`, (err, rows) => {
+      req.app.db.all('SELECT * FROM Rides ORDER BY rideID limit ? offset ?', [pageSize, offset], (err, rows) => {
         if (err || !rows) {
           return sendServerError(res);
         }

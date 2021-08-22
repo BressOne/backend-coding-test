@@ -1,11 +1,14 @@
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 
 const ridesRouter = require('./routes/ridesRoutes');
 const serviceRouter = require('./routes/service');
 const buildSchemas = require('./schemas/rides');
 const specs = require('./utils/swagger');
+const corsOptions = require('./utils/cors');
+const bruteforce = require('./utils/bruteForce');
 
 const app = express();
 
@@ -18,6 +21,9 @@ if (process.env.EXPOSE_SWAGGER) {
 }
 
 app.db = db;
+
+app.use(cors(corsOptions));
+app.use(bruteforce.prevent);
 
 app.use(express.json());
 

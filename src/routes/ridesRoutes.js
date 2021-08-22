@@ -4,7 +4,7 @@ const { getRideById, getRidesList, createRide } = require('./ridesController');
 
 const router = express.Router();
 
-router.post('/rides', (r, re) => createRide(r, re));
+router.post('/rides', createRide);
 
 router.get('/rides', getRidesList);
 
