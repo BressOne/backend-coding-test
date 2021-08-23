@@ -9,8 +9,6 @@ Stability is not guaranteed if you are using older versions of NodeJS.
 2.  [Environment](#Environment)
 3.  [API](#API)
 4.  [Features](#Features)
-5.  [Security](#security)
-6.  [Load Testing](#load-testing)
 
 ## Installation
 
@@ -33,6 +31,9 @@ There are several env vars, which the service can be adjusted with:
 |ENABLE_BRUTE_FORCE_PROTECTION|0 or 1, casts to Boolean. Allows to control BF protection. Disabled, bu default|
 |BF_FREE_RETRIES|Integer >1. Allows to control BF retries. Defaults to 2 inside BF package|
 |BF_MAX_WAIT|integer >1, ms. The initial wait time after the user runs out of retries. Defaults to 500 milliseconds|
+
+My default dev config is:
+`PORT=8010 ALLOW_LOGGING=1 EXPOSE_SWAGGER=1 ALOWED_ORIGINS=http:\\localhost:8010 ENABLE_BRUTE_FORCE_PROTECTION:0 BF_FREE_RETRIES:0 BF_MAX_WAIT:0`
 
 ## API
 
