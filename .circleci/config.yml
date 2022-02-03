@@ -42,15 +42,11 @@ workflows:
               ignore:
                 - main
       - test-coverage:
-          requires:
-            - test-lint
           filters:
             branches:
               ignore:
                 - main
       - test-load:
-          requires:
-            - test-coverage
           filters:
             branches:
               ignore:
